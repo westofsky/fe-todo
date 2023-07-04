@@ -54,3 +54,15 @@ const show_all = () => {
     `현재상태 : todo: ${count["todo"]}개, doing: ${count["doing"]}개, done: ${count["done"]}개`
   );
 };
+
+const show_status = (status) => {
+  let name_id = [];
+  todos.filter((todo) => {
+    if (todo.status === status) {
+      name_id.push(`'${todo.name}, ${todo.id}번'`);
+    }
+  });
+  console.log(
+    `${status}리스트 : 총${name_id.length}건 : ${name_id.toString()}`
+  );
+};

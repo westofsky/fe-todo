@@ -49,7 +49,7 @@ const showAll = () => {
     [STATUS.DOING] :  0,
     [STATUS.DONE] : 0,
   }
-  todos.filter((todo) => count[todo.status]++)
+  todos.forEach((todo) => count[todo.status]++);
 
   console.log(
     MESSAGE.SHOW_ALL(count[STATUS.TODO], count[STATUS.DOING], count[STATUS.DONE])
@@ -61,7 +61,7 @@ const showStatus = (status) => {
   if(checkErrorStatus(status)){
     return;
   }
-  todos.filter((todo) => {
+  todos.forEach((todo) => {
     if (todo.status === status) {
       statusArray.push(MESSAGE.STATUS_ARRAY_STRING(todo.name, todo.id));
     }

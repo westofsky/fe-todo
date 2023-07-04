@@ -41,3 +41,16 @@ const getLine = (line) => {
       break;
   }
 };
+
+const show_all = () => {
+  const count = {
+    "todo": 0,
+    "doing": 0,
+    "done": 0,
+  }
+  todos.filter((todo) => count[todo.status]++)
+
+  console.log(
+    `현재상태 : todo: ${count["todo"]}개, doing: ${count["doing"]}개, done: ${count["done"]}개`
+  );
+};

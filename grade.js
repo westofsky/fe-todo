@@ -14,3 +14,30 @@ const app = () => {
     app();
   });
 };
+
+const getLine = (line) => {
+  const [command, arg1, arg2] = line.split("$");
+  switch (command) {
+    case "show":
+      if (arg1 === "all") {
+        show_all();
+      } else {
+        show_status(arg1);
+      }
+      break;
+    case "add":
+      add_todo(arg1, arg2);
+      break;
+    case "delete":
+      delete_todo(arg1);
+      break;
+    case "update":
+      update_todo(arg1, arg2);
+      break;
+    case "exit":
+      rl.close();
+    default:
+      console.log("없는 명령입니다.");
+      break;
+  }
+};

@@ -1,91 +1,102 @@
 const { todos } = require("./todos");
+const { ERROR, COMMAND, STATUS, MESSAGE } = require("./constant");
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 const app = () => {
-  rl.on("close", () => {
+  rl.on(MESSAGE.CLOSE, () => {
     process.exit();
   });
-  rl.question("명령하세요 : ", (line) => {
+  rl.question(MESSAGE.QUESTION, (line) => {
     getLine(line);
     app();
   });
 };
 
 const getLine = (line) => {
-  const [command, arg1, arg2] = line.split("$");
+  const [command, arg1, arg2] = line.split(COMMAND.SPLIT);
   switch (command) {
-    case "show":
-      if (arg1 === "all") {
+    case COMMAND.SHOW:
+      if (arg1 === COMMAND.ALL) {
         showAll();
       } else {
         showStatus(arg1);
       }
       break;
-    case "add":
+    case COMMAND.ADD:
       addTodo(arg1, arg2);
       break;
-    case "delete":
+    case COMMAND.DELETE:
       deleteTodo(arg1);
       break;
-    case "update":
+    case COMMAND.UPDATE:
       updateTodo(arg1, arg2);
       break;
-    case "exit":
+    case COMMAND.EXIT:
       rl.close();
+    case COMMAND.BLANK:
+      console.log(ERROR.INPUT_BLANK);
     default:
-      console.log("없는 명령입니다.");
+      console.log(ERROR.INVALID_INPUT_COMMAND);
       break;
   }
 };
 
 const showAll = () => {
   const count = {
-    "todo": 0,
-    "doing": 0,
-    "done": 0,
+    [STATUS.TODO] : 0,
+    [STATUS.DOING] :  0,
+    [STATUS.DONE] : 0,
   }
   todos.filter((todo) => count[todo.status]++)
 
   console.log(
-    `현재상태 : todo: ${count["todo"]}개, doing: ${count["doing"]}개, done: ${count["done"]}개`
+    MESSAGE.SHOW_ALL(count[STATUS.TODO], count[STATUS.DOING], count[STATUS.DONE])
   );
 };
 
 const showStatus = (status) => {
   let statusArray = [];
+  // status가 없을 때
+  // status가 todo,doing,done이 아니면 없는 상태입니다.
   todos.filter((todo) => {
     if (todo.status === status) {
-      statusArray.push(`'${todo.name}, ${todo.id}번'`);
+      statusArray.push(MESSAGE.STATUS_ARRAY_STRING(todo.name, todo.id));
     }
   });
   console.log(
-    `${status}리스트 : 총${statusArray.length}건 : ${statusArray.toString()}`
+    MESSAGE.SHOW_STATUS(status, statusArray)
   );
 };
 
 const addTodo = (name, tags) => {
   const tag = JSON.parse(tags);
+  //name이 비어있을 때
+  //tag형식이 이상할때
+  //tae도 비어있을때
   const randomId = Math.round(Math.random() * 100000);
+  // randomid만들었는데 이미 존재하는 아이디 일때 다시 받기
   todos.push({
     name: name,
     tags: tag,
-    status: "todo",
+    status: STATUS.TODO,
     id: randomId,
   });
-  console.log(`${name} 1개가 추가됐습니다.(id : ${randomId})`);
+  console.log(MESSAGE.ADD_TODO(name, randomId));
   showAll();
 };
 
 const deleteTodo = (id) => {
+  //id가 없을때
+  //id가 비어있을때
   const index = todos.findIndex((todo) => todo.id == id);
   if (index < 0) 
-    console.log("id가 없습니다.");
+    console.log(ERROR.ID_NOT_EXISTS);
   else {
     console.log(
-      `${todos[index].name} ${todos[index].status}가 목록에서 삭제됐습니다`
+      MESSAGE.DELETE_TODO(todos[index].name, todos[index].status)
     );
     todos.splice(index, 1);
   }
@@ -93,13 +104,17 @@ const deleteTodo = (id) => {
 };
 
 const updateTodo = (id, status) => {
+  // status가 이미 같은 상태일 경우
+  // id가 없을때
+  // status가 없을때
+  // status가 todo, doing, done가 아닌 경우
   const index = todos.findIndex((todo) => todo.id == id);
   if (index < 0) 
-    console.log("id가 없습니다.");
+    console.log(ERROR.ID_NOT_EXISTS);
   else {
     todos[index].status = status;
     console.log(
-      `${todos[index].name} ${todos[index].status}으로 상태가 변경됐습니다`
+      MESSAGE.UPDATE_TODO(todos[index].name, todos[index].status)
     );
   }
   showAll();

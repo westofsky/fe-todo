@@ -79,3 +79,16 @@ const add_todo = (name, tags) => {
   console.log(`${name} 1개가 추가됐습니다.(id : ${rand_id})`);
   show_all();
 };
+
+const delete_todo = (id) => {
+  const index = todos.findIndex((todo) => todo.id == id);
+  if (index < 0) 
+    console.log("id가 없습니다.");
+  else {
+    console.log(
+      `${todos[index].name} ${todos[index].status}가 목록에서 삭제됐습니다`
+    );
+    todos.splice(index, 1);
+  }
+  show_all();
+};

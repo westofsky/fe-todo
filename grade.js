@@ -120,8 +120,7 @@ const checkErrorStatus = (status) => {
     console.log(ERROR.STATUS_NOT_INPUT);
     return true;
   }
-  const invalidStatus = existStatus.findIndex((existStatus)=> existStatus === status) === -1;
-  if(invalidStatus){
+  if(!existStatus.includes(status)){
     console.log(ERROR.STATUS_NOT_EXIST);
     return true;
   }

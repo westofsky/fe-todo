@@ -1,7 +1,15 @@
 const ERROR = {
   INPUT_BLANK : "명령을 입력해주세요.",
   INVALID_INPUT_COMMAND : "없는 명령입니다.",
-  ID_NOT_EXISTS : "id를 입력하세요.",
+  ID_NOT_INPUT : "id를 입력하세요.",
+  ID_NOT_EXIST : "존재하는 todo의 id가 아닙니다.",
+  STATUS_NOT_INPUT : "상태를 입력하지 않았습니다.",
+  STATUS_NOT_EXIST : "존재하는 상태가 아닙니다.",
+  STATUS_ALREADY : "이미 해당 status입니다.",
+  NAME_NOT_INPUT : "이름이 입력되지 않았습니다.",
+  TAG_NOT_INPUT : "태그가 입력되지 않았습니다.",
+  TAG_INVALID_TYPE : "태그가 올바른 형식이 아닙니다.",
+
 }
 
 const COMMAND = {

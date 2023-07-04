@@ -6,9 +6,6 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 const app = () => {
-  rl.on(MESSAGE.CLOSE, () => {
-    process.exit();
-  });
   rl.question(MESSAGE.QUESTION, (line) => {
     getLine(line);
     app();
@@ -36,8 +33,10 @@ const getLine = (line) => {
       break;
     case COMMAND.EXIT:
       rl.close();
+      process.exit();
     case COMMAND.BLANK:
       console.log(ERROR.INPUT_BLANK);
+      break;
     default:
       console.log(ERROR.INVALID_INPUT_COMMAND);
       break;
@@ -59,8 +58,9 @@ const showAll = () => {
 
 const showStatus = (status) => {
   let statusArray = [];
-  // status가 없을 때
-  // status가 todo,doing,done이 아니면 없는 상태입니다.
+  if(checkErrorStatus(status)){
+    return;
+  }
   todos.filter((todo) => {
     if (todo.status === status) {
       statusArray.push(MESSAGE.STATUS_ARRAY_STRING(todo.name, todo.id));
@@ -72,12 +72,10 @@ const showStatus = (status) => {
 };
 
 const addTodo = (name, tags) => {
+  if(checkErrorAddTodo(name,tags))
+    return;
   const tag = JSON.parse(tags);
-  //name이 비어있을 때
-  //tag형식이 이상할때
-  //tae도 비어있을때
-  const randomId = Math.round(Math.random() * 100000);
-  // randomid만들었는데 이미 존재하는 아이디 일때 다시 받기
+  const randomId = generateId();
   todos.push({
     name: name,
     tags: tag,
@@ -89,35 +87,115 @@ const addTodo = (name, tags) => {
 };
 
 const deleteTodo = (id) => {
-  //id가 없을때
-  //id가 비어있을때
   const index = todos.findIndex((todo) => todo.id == id);
-  if (index < 0) 
-    console.log(ERROR.ID_NOT_EXISTS);
-  else {
-    console.log(
-      MESSAGE.DELETE_TODO(todos[index].name, todos[index].status)
-    );
-    todos.splice(index, 1);
+  if (checkErrorDeleteTodo(id, index)) {
+    return;
   }
+  console.log(
+    MESSAGE.DELETE_TODO(todos[index].name, todos[index].status)
+  );
+  todos.splice(index, 1);
   showAll();
 };
 
 const updateTodo = (id, status) => {
-  // status가 이미 같은 상태일 경우
-  // id가 없을때
-  // status가 없을때
-  // status가 todo, doing, done가 아닌 경우
   const index = todos.findIndex((todo) => todo.id == id);
-  if (index < 0) 
-    console.log(ERROR.ID_NOT_EXISTS);
-  else {
-    todos[index].status = status;
-    console.log(
-      MESSAGE.UPDATE_TODO(todos[index].name, todos[index].status)
-    );
+  if(checkErrorUpdateTodo(id,index,status)){
+    return;
   }
+  todos[index].status = status;
+  console.log(
+    MESSAGE.UPDATE_TODO(todos[index].name, todos[index].status)
+  );
   showAll();
 };
+
+const checkErrorStatus = (status) => {
+  const existStatus = [
+    STATUS.TODO,
+    STATUS.DOING,
+    STATUS.DONE
+  ];
+  if(!status){
+    console.log(ERROR.STATUS_NOT_INPUT);
+    return true;
+  }
+  const invalidStatus = existStatus.findIndex((existStatus)=> existStatus === status) === -1;
+  if(invalidStatus){
+    console.log(ERROR.STATUS_NOT_EXIST);
+    return true;
+  }
+  return false;
+}
+
+const checkErrorAddTodo = (name,tags) => {
+  if(!name){
+    console.log(ERROR.NAME_NOT_INPUT);
+    return true;
+  }
+  if(!tags){
+    console.log(ERROR.TAG_NOT_INPUT);
+    return true;
+  }
+  if (!checkStringIsArray(tags)) {
+    console.log(ERROR.TAG_INVALID_TYPE);
+    return true;
+  }
+  return false;
+}
+
+const checkErrorDeleteTodo = (id, index) => {
+  if(checkIdInput(id))
+    return true;
+  if (checkTodoExist(index)){
+    return true;
+  }
+  return false;
+}
+
+const checkErrorUpdateTodo = (id, index, status) => {
+  if(checkIdInput(id))
+    return true;
+  if (checkTodoExist(index)){
+    return true;
+  }
+  if (todos[index].status === status) {
+    console.log(ERROR.STATUS_ALREADY);
+    return true;
+  }
+  return checkErrorStatus(status)
+}
+
+const checkStringIsArray = (string) => {
+  const regex = /\["([^"]+)"(?:,\s*"([^"]+)")*\]/;
+  return regex.test(string);
+}
+
+const checkIdInput = (id) => { 
+  if(!id && id !==0){
+    console.log(ERROR.ID_NOT_INPUT);
+    return true;
+  }
+  return false;
+}
+
+const checkTodoExist = (index) => {
+  if (index < 0) {
+    console.log(ERROR.ID_NOT_EXIST);
+    return true;
+  }
+  return false;
+}
+const generateId = () => {
+  const id = Math.round(Math.random() * 100000) + 1;
+  const duplicatedTodo =  todos.filter((todo) => 
+    id === todo.id
+  );
+  if (duplicatedTodo.length)
+    return generateId();
+  return id;
+}
+
+
 
 app();

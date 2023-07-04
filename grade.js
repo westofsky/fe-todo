@@ -1,10 +1,9 @@
-const { todos: todo_array } = require("./todos");
+const { todos } = require("./todos");
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-const todos = todo_array;
 const app = () => {
   rl.on("close", () => {
     process.exit();
@@ -20,19 +19,19 @@ const getLine = (line) => {
   switch (command) {
     case "show":
       if (arg1 === "all") {
-        show_all();
+        showAll();
       } else {
-        show_status(arg1);
+        showStatus(arg1);
       }
       break;
     case "add":
-      add_todo(arg1, arg2);
+      addTodo(arg1, arg2);
       break;
     case "delete":
-      delete_todo(arg1);
+      deleteTodo(arg1);
       break;
     case "update":
-      update_todo(arg1, arg2);
+      updateTodo(arg1, arg2);
       break;
     case "exit":
       rl.close();
@@ -42,7 +41,7 @@ const getLine = (line) => {
   }
 };
 
-const show_all = () => {
+const showAll = () => {
   const count = {
     "todo": 0,
     "doing": 0,
@@ -55,32 +54,32 @@ const show_all = () => {
   );
 };
 
-const show_status = (status) => {
-  let name_id = [];
+const showStatus = (status) => {
+  let statusArray = [];
   todos.filter((todo) => {
     if (todo.status === status) {
-      name_id.push(`'${todo.name}, ${todo.id}번'`);
+      statusArray.push(`'${todo.name}, ${todo.id}번'`);
     }
   });
   console.log(
-    `${status}리스트 : 총${name_id.length}건 : ${name_id.toString()}`
+    `${status}리스트 : 총${statusArray.length}건 : ${statusArray.toString()}`
   );
 };
 
-const add_todo = (name, tags) => {
+const addTodo = (name, tags) => {
   const tag = JSON.parse(tags);
-  const rand_id = Math.round(Math.random() * 100000);
+  const randomId = Math.round(Math.random() * 100000);
   todos.push({
     name: name,
     tags: tag,
     status: "todo",
-    id: rand_id,
+    id: randomId,
   });
-  console.log(`${name} 1개가 추가됐습니다.(id : ${rand_id})`);
-  show_all();
+  console.log(`${name} 1개가 추가됐습니다.(id : ${randomId})`);
+  showAll();
 };
 
-const delete_todo = (id) => {
+const deleteTodo = (id) => {
   const index = todos.findIndex((todo) => todo.id == id);
   if (index < 0) 
     console.log("id가 없습니다.");
@@ -90,10 +89,10 @@ const delete_todo = (id) => {
     );
     todos.splice(index, 1);
   }
-  show_all();
+  showAll();
 };
 
-const update_todo = (id, status) => {
+const updateTodo = (id, status) => {
   const index = todos.findIndex((todo) => todo.id == id);
   if (index < 0) 
     console.log("id가 없습니다.");
@@ -103,7 +102,7 @@ const update_todo = (id, status) => {
       `${todos[index].name} ${todos[index].status}으로 상태가 변경됐습니다`
     );
   }
-  show_all();
+  showAll();
 };
 
 app();

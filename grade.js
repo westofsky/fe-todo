@@ -87,7 +87,7 @@ const addTodo = (name, tags) => {
 };
 
 const deleteTodo = (id) => {
-  const index = todos.findIndex((todo) => todo.id == id);
+  const index = todos.findIndex((todo) => (todo.id).toString() === id);
   if (checkErrorDeleteTodo(id, index)) {
     return;
   }
@@ -99,7 +99,7 @@ const deleteTodo = (id) => {
 };
 
 const updateTodo = (id, status) => {
-  const index = todos.findIndex((todo) => todo.id == id);
+  const index = todos.findIndex((todo) => (todo.id).toString() === id);
   if(checkErrorUpdateTodo(id,index,status)){
     return;
   }

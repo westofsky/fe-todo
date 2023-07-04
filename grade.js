@@ -92,3 +92,18 @@ const delete_todo = (id) => {
   }
   show_all();
 };
+
+const update_todo = (id, status) => {
+  const index = todos.findIndex((todo) => todo.id == id);
+  if (index < 0) 
+    console.log("id가 없습니다.");
+  else {
+    todos[index].status = status;
+    console.log(
+      `${todos[index].name} ${todos[index].status}으로 상태가 변경됐습니다`
+    );
+  }
+  show_all();
+};
+
+app();

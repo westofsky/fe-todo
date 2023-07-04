@@ -66,3 +66,16 @@ const show_status = (status) => {
     `${status}리스트 : 총${name_id.length}건 : ${name_id.toString()}`
   );
 };
+
+const add_todo = (name, tags) => {
+  const tag = JSON.parse(tags);
+  const rand_id = Math.round(Math.random() * 100000);
+  todos.push({
+    name: name,
+    tags: tag,
+    status: "todo",
+    id: rand_id,
+  });
+  console.log(`${name} 1개가 추가됐습니다.(id : ${rand_id})`);
+  show_all();
+};

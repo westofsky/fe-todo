@@ -1,24 +1,24 @@
 const ERROR = {
-    INPUT_BLANK : "명령을 입력해주세요.",
-    INVALID_INPUT_COMMAND : "없는 명령입니다.",
-    ID_NOT_EXISTS : "id를 입력하세요.",
+  INPUT_BLANK : "명령을 입력해주세요.",
+  INVALID_INPUT_COMMAND : "없는 명령입니다.",
+  ID_NOT_EXISTS : "id를 입력하세요.",
 }
 
 const COMMAND = {
-    SPLIT: "$",
-    SHOW : "show",
-    ADD : "add",
-    DELETE : "delete",
-    UPDATE : "update",
-    EXIT : "exit",
-    BLANK : "",
-    ALL : "all",
+  SPLIT: "$",
+  SHOW : "show",
+  ADD : "add",
+  DELETE : "delete",
+  UPDATE : "update",
+  EXIT : "exit",
+  BLANK : "",
+  ALL : "all",
 }
 
 const STATUS = {
-    TODO : "todo",
-    DOING : "doing",
-    DONE : "done",
+  TODO : "todo",
+  DOING : "doing",
+  DONE : "done",
 }
 
 const MESSAGE = {
@@ -32,8 +32,8 @@ const MESSAGE = {
     UPDATE_TODO: (name, status) => `${name} ${status}으로 상태가 변경됐습니다`,
 }
 module.exports  = {
-    ERROR,
-    COMMAND,
-    STATUS,
-    MESSAGE
+  ERROR,
+  COMMAND,
+  STATUS,
+  MESSAGE
 }

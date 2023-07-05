@@ -5,6 +5,9 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+/**
+ * 메인 함수
+*/
 const app = () => {
   rl.question(MESSAGE.QUESTION, (line) => {
     getLine(line);
@@ -12,6 +15,9 @@ const app = () => {
   });
 };
 
+/**
+ * 한 줄 입력 받는 함수
+*/
 const getLine = (line) => {
   const [command, arg1, arg2] = line.split(COMMAND.SPLIT);
   switch (command) {
@@ -43,6 +49,9 @@ const getLine = (line) => {
   }
 };
 
+/**
+ * 전체 Todo 리스트 보여주는 함수
+*/
 const showAll = () => {
   const count = {
     [STATUS.TODO] : 0,
@@ -56,6 +65,9 @@ const showAll = () => {
   );
 };
 
+/**
+ * status에 따른 Todo 리스트 보여주는 함수
+*/
 const showStatus = (status) => {
   let statusArray = [];
   if(checkErrorStatus(status)){
@@ -71,6 +83,9 @@ const showStatus = (status) => {
   );
 };
 
+/**
+ * Todo 추가하는 함수
+*/
 const addTodo = (name, tags) => {
   if(checkErrorAddTodo(name,tags))
     return;
@@ -86,6 +101,9 @@ const addTodo = (name, tags) => {
   showAll();
 };
 
+/**
+ * Todo 지우는 함수
+*/
 const deleteTodo = (id) => {
   const index = todos.findIndex((todo) => (todo.id).toString() === id);
   if (checkErrorDeleteTodo(id, index)) {
@@ -98,6 +116,9 @@ const deleteTodo = (id) => {
   showAll();
 };
 
+/**
+ * Todo 업데이트 하는 함수
+*/
 const updateTodo = (id, status) => {
   const index = todos.findIndex((todo) => (todo.id).toString() === id);
   if(checkErrorUpdateTodo(id,index,status)){
@@ -110,6 +131,9 @@ const updateTodo = (id, status) => {
   showAll();
 };
 
+/**
+ * status 입력이 제대로 되었는지 확인하는 함수
+*/
 const checkErrorStatus = (status) => {
   const existStatus = [
     STATUS.TODO,
@@ -127,6 +151,9 @@ const checkErrorStatus = (status) => {
   return false;
 }
 
+/**
+ * addTodo 입력 값이 올바른지 확인하는 함수
+*/
 const checkErrorAddTodo = (name,tags) => {
   if(!name){
     console.log(ERROR.NAME_NOT_INPUT);
@@ -143,6 +170,9 @@ const checkErrorAddTodo = (name,tags) => {
   return false;
 }
 
+/**
+ * deleteTodo 입력 값이 올바른지 확인하는 함수
+*/
 const checkErrorDeleteTodo = (id, index) => {
   if(checkIdInput(id))
     return true;
@@ -152,6 +182,9 @@ const checkErrorDeleteTodo = (id, index) => {
   return false;
 }
 
+/**
+ * updateTodo 입력 값이 올바른지 확인하는 함수
+*/
 const checkErrorUpdateTodo = (id, index, status) => {
   if(checkIdInput(id))
     return true;
@@ -165,11 +198,17 @@ const checkErrorUpdateTodo = (id, index, status) => {
   return checkErrorStatus(status)
 }
 
+/**
+ * 문자열이 문자열 배열인지 확인하는 함수
+*/
 const checkStringIsArray = (string) => {
   const regex = /\["([^"]+)"(?:,\s*"([^"]+)")*\]/;
   return regex.test(string);
 }
 
+/**
+ * id입력값이 올바른지 확인하는 함수
+*/
 const checkIdInput = (id) => { 
   if(!id && id !==0){
     console.log(ERROR.ID_NOT_INPUT);
@@ -178,6 +217,9 @@ const checkIdInput = (id) => {
   return false;
 }
 
+/**
+ * id에 해당하는 todo가 존재하는지 확인하는 함수
+*/
 const checkTodoExist = (index) => {
   if (index < 0) {
     console.log(ERROR.ID_NOT_EXIST);
@@ -185,6 +227,10 @@ const checkTodoExist = (index) => {
   }
   return false;
 }
+
+/**
+ * id값을 생성하는 함수
+*/
 const generateId = () => {
   const id = Math.round(Math.random() * 100000) + 1;
   const duplicatedTodo =  todos.filter((todo) => 

@@ -8,7 +8,7 @@ const ERROR = {
   STATUS_ALREADY : "이미 해당 status입니다.",
   NAME_NOT_INPUT : "이름이 입력되지 않았습니다.",
   TAG_NOT_INPUT : "태그가 입력되지 않았습니다.",
-  TAG_INVALID_TYPE : "태그가 올바른 형식이 아닙니다.",
+  TAG_INVALID_TYPE : "태그가 올바른 형식이 아닙니다.(tag의 형식은 [\"tag1\",\"tag2\"]입니다)",
 
 }
 

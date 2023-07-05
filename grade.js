@@ -69,7 +69,7 @@ const showAll = () => {
  * status에 따른 Todo 리스트 보여주는 함수
 */
 const showStatus = (status) => {
-  let statusArray = [];
+  const statusArray = [];
   if(checkErrorStatus(status)){
     return;
   }
